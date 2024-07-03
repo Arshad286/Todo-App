@@ -19,5 +19,6 @@ This project is a simple TODO application built using Vite and React for the fro
 
 ## Technologies Used
 - **Frontend**: Vite, React
-- **Backend**: Python, Flask
+- **Backend**: NodeJs, ExpressJs
+- **Database**: MongoDB
 
