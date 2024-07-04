@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
-import PasswordInput from "../../components/Input/PasswordInput";
+import PasswordInput from "../../components/Input/password-input";
 import { Link } from "react-router-dom";
 import { validateEmail } from "../../utils/helper";
 
 const SignUp = () => {
-  const [name, SetName] = useState("");
+  const [firstname, SetFirstName] = useState("");
+  const [lastname, SetLastName] = useState("");
   const [email, SetEmail] = useState("");
   const [password, SetPassword] = useState("");
   const [error, SetError] = useState(null);
@@ -13,22 +14,27 @@ const SignUp = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
 
-    if(!name){
-      SetError("Please enter a name");
+    if (!firstname) {
+      SetError("Please enter first name");
       return;
     }
 
-    if(!validateEmail(email)){
+    if (!lastname) {
+      SetError("Please enter last name");
+      return;
+    }
+
+    if (!validateEmail(email)) {
       SetError("Please enter a valid email address.");
       return;
     }
-     
-    if(!password){
+
+    if (!password) {
       SetError("Please enter a password");
       return;
     }
 
-    if(password.length < 6){
+    if (password.length < 6) {
       SetError("Password must be at least 6 characters long");
       return;
     }
@@ -54,11 +60,19 @@ const SignUp = () => {
 
             <input
               type="text"
-              placeholder="Name"
+              placeholder="First Name"
               className="input-box w-full mb-4  px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              value={name}
-              onChange={(e) => SetName(e.target.value)}
+              value={firstname}
+              onChange={(e) => SetFirstName(e.target.value)}
             />
+
+            <input
+             type="text"
+             placeholder="Last Name"
+             className="input-box w-full mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+             value={lastname}
+             onChange={(e) => SetLastName(e.target.name)}
+           />
 
             <input
               type="text"
@@ -84,7 +98,7 @@ const SignUp = () => {
             </button>
 
             <p className="text-sm text-center mt-4">
-               Already have an account?
+              Already have an account?
               <Link
                 to="/login"
                 className="font-medium text-indigo-600 underline"
