@@ -1,6 +1,6 @@
 ## Todo Application
 
-This project is a simple TODO application built using Vite and React for the frontend and Python with Flask for the backend. The application allows users to sign up, log in, and log out. Users can create, edit, update, mark as done, revert to the original status, delete TODO items, and filter TODO items based on specific criteria.
+This project is a simple TODO application built using Vite and React for the frontend and NodeJs and MongoDB for the backend. The application allows users to sign up, log in, and log out. Users can create, edit, update, mark as done, revert to the original status, delete TODO items, and filter TODO items based on specific criteria.
 
 ## Features
 - **User Authentication**: Users can sign up, log in, and log out.
