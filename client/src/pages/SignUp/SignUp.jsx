@@ -71,7 +71,7 @@ const SignUp = () => {
              placeholder="Last Name"
              className="input-box w-full mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
              value={lastname}
-             onChange={(e) => SetLastName(e.target.name)}
+             onChange={(e) => SetLastName(e.target.value)}
            />
 
             <input
