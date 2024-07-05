@@ -4,6 +4,8 @@ import TodoCard from "../../components/Cards/todo-card";
 import { MdAdd } from "react-icons/md";
 import AddNotes from "./add-notes";
 import Modal from "react-modal";
+import FilterTodo from "../../components/Filter/filter-todo";
+
 
 
 const Home = () => {
@@ -14,24 +16,65 @@ const Home = () => {
     data : null,
   });
 
+  const todos = [
+    // Example TODO items
+    {
+      title: "Demo",
+      date: "2023-07-11",
+      description: "Completing this app",
+      tags: "#meeting",
+      isActive: true,
+      isPinned: true,
+    },
+    {
+      title: "Demo1",
+      date: "2023-07-11",
+      description: "Completing this app",
+      tags: "#meeting",
+      isActive: false,
+      isPinned: true,
+    },
+    // Add more TODO items here
+  ];
+
+  const [filter, setFilter] = useState({ status: "all", overdue: "all" });
+  
+  const todoDate = new Date(todos.date);
+  const today = new Date();
+
+  const filterTodos = (todos) => {
+    return todos.filter((todo) => {
+      const isOverdue = todoDate < today
+      const matchesStatus =
+        filter.status === "all" ||
+        (filter.status === "to-do" && todo.isActive) ||
+        (filter.status === "done" && !todo.isActive);
+      const matchesOverdue =
+        filter.overdue === "all" || (filter.overdue === "overdue" && isOverdue);
+      return matchesStatus && matchesOverdue;
+    });
+  };
+
   return (
     <>
       <Navbar />
 
-      <div className="container mx-auto">
+      <FilterTodo filter={filter} setFilter={setFilter} />
         <div className="grid grid-cols-3 gap-4 mt-8">
-          <TodoCard
-            title="Demo"
-            date="7 july 2024"
-            description="Completing this app"
-            tags="#meeting"
-            isActive={true}
-            isPinned={true}
-            onEdit={() => {}}
-            onDelete={() => {}}
-            onPinNote={() => {}}
-          />
-        </div>
+          {filterTodos(todos).map((todo, index) => (
+            <TodoCard
+              key={index}
+              title={todo.title}
+              date={todo.date}
+              description={todo.description}
+              tags={todo.tags}
+              isActive={todo.isActive}
+              isPinned={todo.isPinned}
+              onEdit={() => {}}
+              onDelete={() => {}}
+              onPinNote={() => {}}
+            />
+          ))}
       </div>
 
       <button className="w-16 h-16 flex items-center justify-center rounded-2xl bg-primary hover:bg-blue-600 absolute right-10 bottom-10 "
