@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import TodoCard from "../../components/Cards/todo-card";
+import { MdAdd } from "react-icons/md";
+import AddNotes from "./add-notes";
+import Modal from "react-modal";
+
 
 const Home = () => {
+
+  const [openAddModal , setOpenAddModel] = useState({
+    isShown : false,
+    type : "add",
+    data : null,
+  });
+
   return (
     <>
       <Navbar />
@@ -22,6 +33,34 @@ const Home = () => {
           />
         </div>
       </div>
+
+      <button className="w-16 h-16 flex items-center justify-center rounded-2xl bg-primary hover:bg-blue-600 absolute right-10 bottom-10 "
+       onClick={() => {
+        setOpenAddModel({ isShown : true, type : "add", data : null});
+       }}
+       >
+       <MdAdd className="text-[32px]  text-white"/>
+      </button>
+
+      <Modal
+       isOpen={openAddModal.isShown}
+       onRequestClose={() => {}}
+       style={{
+        overlay: {
+          backgroundColor: "rgba(0,0,0,0.2)",
+        },
+       }}
+       contentLabel=""
+       className="w-[40%] max-h-3/4 bg-white rounded-md mx-auto mt-14 p-5 overflow-scroll"
+      >
+
+      <AddNotes
+      onClose={() => {
+        setOpenAddModel( {isShown: false, type : "add" , data : null});
+      }}
+      />
+
+      </Modal>
     </>
   );
 };
