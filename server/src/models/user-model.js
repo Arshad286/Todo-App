@@ -1,13 +1,13 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-    firstName: {type : String},
-    lastName: {type : String},
-    email: {type : String},
-    password: {type : String},
-    createdOn: {type: Date, default: new Date().getTime()},
-})
+  firstName: { type: String, require: true },
+  lastName: { type: String, require: true },
+  email: { type: String, require: true, unique: true },
+  password: { type: String, require: true },
+  createdOn: { type: Date, default: new Date().getTime() },
+});
 
-export default mongoose.model('User', userSchema);
+export default mongoose.model("User", userSchema);
