@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import Connect from "./config/connect-db.js";
 import userRoutes from "./routes/user-routes.js";
+import todoRoutes from "./routes/todo-routes.js";
 
 dotenv.config();
 
@@ -25,6 +26,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/users", userRoutes);
+app.use("/api/todos", todoRoutes);
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);
