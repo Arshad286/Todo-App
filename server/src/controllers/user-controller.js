@@ -3,7 +3,6 @@ import User from "../models/user-model.js";
 import bcrypt from "bcrypt";
 
 //Create Account
-
 export const createAccount = async (req, res) => {
 
 try{
@@ -124,4 +123,21 @@ export const loginAccount = async(req, res) => {
             message: "Intenal server error",
         });
     }
+}
+
+//Get User
+export const getUserInfo = async(req, res) => {
+
+    const {user} = req.user;
+
+    const isUser = await User.findOne({ _id : user._id});
+
+    if(!isUser){
+      return res.status(401);
+    }
+
+    return res.status(201).json({
+      user: {isUser},
+      message: " "
+    })
 }
