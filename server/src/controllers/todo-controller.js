@@ -112,3 +112,113 @@ export const getTodos = async (req, res) => {
     });
   }
 };
+
+//Delete Todo
+export const deleteTodo = async(req, res) => {
+     const todoId = req.params.id;
+    const {user} = req.user;
+
+    try{
+      const todo = await Todo.findOne({
+        _id: todoId, 
+        userId: user._id
+      })
+
+      if(!todo){
+        return res.status(404).json({
+          error: true,
+          message: "Todo not found",
+        });
+      }
+
+        await Todo.deleteOne({
+          _id : todoId,
+          userId: user._id,
+        });
+
+        return res.json({
+          error:false,
+          message: "Todo delete successfully"
+        })
+      }catch(error){
+        return res.status(500).json({
+          error: true,
+          message: "Internal Server Error",
+
+        });
+      }
+    
+};
+
+//Update isCompleted Value
+export const isCompleted = async(req, res) => {
+
+  const todoId = req.params.id;
+
+  const { Completed } = req.body;
+  const { user } = req.user;
+
+
+  try {
+    const todo = await Todo.findOne({ _id: todoId, userId: user._id });
+
+    if (!todo) {
+      return res.status(404).json({
+        error: true,
+        message: "Todo Not Found",
+      });
+    }
+   
+    todo.Completed = Completed 
+
+    await todo.save();
+
+    return res.status(201).json({
+      error: false,
+      todo,
+      message: "Todo updated Successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: true,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+//Update isPinned Value
+export const isPinned = async(req, res) => {
+  const todoId = req.params.id;
+
+  const { isPinned } = req.body;
+  const { user } = req.user;
+
+
+  try {
+    const todo = await Todo.findOne({ _id: todoId, userId: user._id });
+
+    if (!todo) {
+      return res.status(404).json({
+        error: true,
+        message: "Todo Not Found",
+      });
+    }
+   
+   todo.isPinned = isPinned 
+
+    await todo.save();
+
+    return res.status(201).json({
+      error: false,
+      todo,
+      message: "Todo updated Successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: true,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+
