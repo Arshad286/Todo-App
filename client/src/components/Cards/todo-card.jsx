@@ -14,6 +14,7 @@ const TodoCard = ({
   isPinned,
   isActive,
   onEdit,
+  
   onDelete,
   onPinTodo,
 }) => {

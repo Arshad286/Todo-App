@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import TodoCard from "../../components/Cards/todo-card";
 import { MdAdd } from "react-icons/md";
 import AddNotes from "./add-notes";
 import Modal from "react-modal";
 import FilterTodo from "../../components/Filter/filter-todo";
-
-
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../utils/axios-instance";
 
 const Home = () => {
 
@@ -20,7 +20,7 @@ const Home = () => {
     // Example TODO items
     {
       title: "Demo",
-      date: "2023-07-11",
+      date: "2023-07-5",
       description: "Completing this app",
       tags: "#meeting",
       isActive: true,
@@ -28,22 +28,48 @@ const Home = () => {
     },
     {
       title: "Demo1",
-      date: "2023-07-11",
+      date: "2024-07-05",
       description: "Completing this app",
       tags: "#meeting",
       isActive: false,
-      isPinned: true,
+      isPinned: false,
     },
     // Add more TODO items here
   ];
 
+    const [userInfo, setUserInfo] = useState(null);
+
+     const navigate = useNavigate();
+
+   // Get User Info
+     const getUserInfo = async () => {
+       try{
+      const response = await axiosInstance.get("/users/get-user");
+
+       if(response.data && response.data.user){
+            setUserInfo(response.data.user);
+     }
+     }catch(error){
+
+      if(error.response.status === 401){
+       localStorage.clear();
+         navigate("/login");
+       }
+    }
+   };
+
+  useEffect(() => {
+    getUserInfo();
+  },[])
+
+ 
+
   const [filter, setFilter] = useState({ status: "all", overdue: "all" });
-  
-  const todoDate = new Date(todos.date);
-  const today = new Date();
 
   const filterTodos = (todos) => {
+    const today = new Date();
     return todos.filter((todo) => {
+      const todoDate = new Date(todo.date);
       const isOverdue = todoDate < today
       const matchesStatus =
         filter.status === "all" ||
@@ -57,7 +83,7 @@ const Home = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar  userInfo = {userInfo} />
 
       <FilterTodo filter={filter} setFilter={setFilter} />
         <div className="grid grid-cols-3 gap-4 mt-8">
