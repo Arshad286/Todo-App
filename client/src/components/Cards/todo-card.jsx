@@ -14,9 +14,9 @@ const TodoCard = ({
   isPinned,
   isActive,
   onEdit,
-  
   onDelete,
   onPinTodo,
+  onCompleted,
 }) => {
   return (
     <div className="border rounded p-4 bg-white hover:shadow-xl transition-all ease-in-out ">
@@ -37,7 +37,7 @@ const TodoCard = ({
             className={`icon-btn ${
               isActive ? "text-secondary" : "text-slate-500"
             }`}
-            onClick={isActive}
+            onClick={onCompleted}
           />
         </div>
       </div>
