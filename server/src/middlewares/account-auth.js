@@ -11,13 +11,14 @@ export const authenticationToken = (req, res, next) => {
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) {
+      console.log("Token verification failed:", err);
       return res.status(401).json({
         message: "Invalid token",
       });
     }
 
+    console.log("Token verified successfully, user:", user);
     req.user = user;
     next();
   });
 };
-

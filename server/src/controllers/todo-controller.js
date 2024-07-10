@@ -114,50 +114,46 @@ export const getTodos = async (req, res) => {
 };
 
 //Delete Todo
-export const deleteTodo = async(req, res) => {
-     const todoId = req.params.id;
-    const {user} = req.user;
+export const deleteTodo = async (req, res) => {
+  const todoId = req.params.id;
+  const { user } = req.user;
 
-    try{
-      const todo = await Todo.findOne({
-        _id: todoId, 
-        userId: user._id
-      })
+  try {
+    const todo = await Todo.findOne({
+      _id: todoId,
+      userId: user._id,
+    });
 
-      if(!todo){
-        return res.status(404).json({
-          error: true,
-          message: "Todo not found",
-        });
-      }
+    if (!todo) {
+      return res.status(404).json({
+        error: true,
+        message: "Todo not found",
+      });
+    }
 
-        await Todo.deleteOne({
-          _id : todoId,
-          userId: user._id,
-        });
+    await Todo.deleteOne({
+      _id: todoId,
+      userId: user._id,
+    });
 
-        return res.json({
-          error:false,
-          message: "Todo delete successfully"
-        })
-      }catch(error){
-        return res.status(500).json({
-          error: true,
-          message: "Internal Server Error",
-
-        });
-      }
-    
+    return res.json({
+      error: false,
+      message: "Todo delete successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: true,
+      message: "Internal Server Error",
+    });
+  }
 };
 
 //Update isCompleted Value
-export const isCompleted = async(req, res) => {
-
+export const isCompleted = async (req, res) => {
   const todoId = req.params.id;
 
   const { Completed } = req.body;
   const { user } = req.user;
-
 
   try {
     const todo = await Todo.findOne({ _id: todoId, userId: user._id });
@@ -168,8 +164,8 @@ export const isCompleted = async(req, res) => {
         message: "Todo Not Found",
       });
     }
-   
-    todo.Completed = Completed 
+
+    todo.Completed = Completed;
 
     await todo.save();
 
@@ -187,12 +183,11 @@ export const isCompleted = async(req, res) => {
 };
 
 //Update isPinned Value
-export const isPinned = async(req, res) => {
+export const isPinned = async (req, res) => {
   const todoId = req.params.id;
 
   const { isPinned } = req.body;
   const { user } = req.user;
-
 
   try {
     const todo = await Todo.findOne({ _id: todoId, userId: user._id });
@@ -203,8 +198,8 @@ export const isPinned = async(req, res) => {
         message: "Todo Not Found",
       });
     }
-   
-   todo.isPinned = isPinned 
+
+    todo.isPinned = isPinned;
 
     await todo.save();
 
@@ -221,4 +216,35 @@ export const isPinned = async(req, res) => {
   }
 };
 
+export const searchTodo = async (req, res) => {
+  const { user } = req.user;
+  const { query } = req.query;
 
+  if (!query) {
+    return res.status(400).json({
+      error: true,
+      message: "Search query is required",
+    });
+  }
+
+  try {
+    const matchingTodo = await Todo.find({
+      userId: user._id,
+      $or: [
+        { title: { $regex: new RegExp(query, "i") } },
+        { description: { $regex: new RegExp(query, "i") } },
+      ],
+    });
+
+    return res.json({
+      error: false,
+      todos: matchingTodo,
+      message: "Todo matching the search query retrived successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: true,
+      message: "Internal Server error",
+    });
+  }
+};

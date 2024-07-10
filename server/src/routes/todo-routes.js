@@ -1,5 +1,5 @@
 import express from 'express';
-import {addTodo, updateTodo, getTodos, deleteTodo, isPinned , isCompleted} from '../controllers/todo-controller.js'
+import {addTodo, updateTodo, getTodos, deleteTodo, isPinned , isCompleted,searchTodo} from '../controllers/todo-controller.js'
 import {authenticationToken} from '../middlewares/account-auth.js';
 
 const router = express.Router();
@@ -11,5 +11,6 @@ router.delete('/todos/:id', authenticationToken, deleteTodo);
 
 router.patch('/todos/:id', authenticationToken, isPinned);
 router.patch('/todos/:id/status', authenticationToken, isCompleted);
+router.get('/todos/search', authenticationToken, searchTodo);
 
 export default router;
