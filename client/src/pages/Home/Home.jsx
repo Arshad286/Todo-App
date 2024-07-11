@@ -80,7 +80,7 @@ const Home = () => {
   };
 
   //Delete Todos
-  const DeletTodo = async (t) => {
+  const DeletTodo = async (data) => {
     const todoId = data._id;
 
     try {

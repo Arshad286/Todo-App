@@ -3,6 +3,7 @@ import { MdClose } from "react-icons/md";
 import axiosInstance from "../../utils/axios-instance";
 
 const AddNotes = ({ todoData, tag, getAllTodo, onClose, showToastMessage }) => {
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [type, setType] = useState("Official");
@@ -11,8 +12,8 @@ const AddNotes = ({ todoData, tag, getAllTodo, onClose, showToastMessage }) => {
 
   useEffect(() => {
     if (tag === "edit" && todoData) {
-      setTitle(todoData.title || " ");
-      setDescription(todoData.description || " ");
+      setTitle(todoData.title );
+      setDescription(todoData.description  || " ");
       setType(todoData.type || "Official");
       setDueDate(todoData.dueDate ? todoData.dueDate.split("T")[0] : "");
     }
@@ -102,6 +103,7 @@ const AddNotes = ({ todoData, tag, getAllTodo, onClose, showToastMessage }) => {
           type="text"
           className="text-2l text-slate-950 outline-none"
           placeholder="Title"
+          value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
       </div>
@@ -111,6 +113,7 @@ const AddNotes = ({ todoData, tag, getAllTodo, onClose, showToastMessage }) => {
           type="text"
           className="text-sm text-slate-950 outline-none bg-slate-50 p-2 roundede"
           placeholder="Description"
+          value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={10}
         />

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import ProfileInfo from "../Cards/profile-info";
 import SearchBar from "../SearchBar/search-bar";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = ({ userInfo, onSearchTodo, handleClearSearch }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [searchQuery, setsearchQuery] = useState("");
 
   const onLogout = () => {
@@ -27,10 +29,14 @@ const Navbar = ({ userInfo, onSearchTodo, handleClearSearch }) => {
     handleClearSearch();
   };
 
+  const isLoginOrSignupPage = location.pathname === '/login' || location.pathname === '/signUp';
+  
+
   return (
     <div className="bg-white flex items-center justify-between px-6 py-2 drop-shadow">
       <h2 className="text-black py-2 text-xl font-medium">Todo</h2>
-
+ 
+    {!isLoginOrSignupPage && (
       <SearchBar
         value={searchQuery}
         onChange={({ target }) => {
@@ -39,6 +45,8 @@ const Navbar = ({ userInfo, onSearchTodo, handleClearSearch }) => {
         handleSearch={handleSearch}
         onClearSearch={onClearSearch}
       />
+          )}
+
 
       <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
     </div>
