@@ -37,7 +37,6 @@ export const addTodo = async (req, res) => {
       message: "Todo added Successfully",
     });
   } catch (error) {
-    console.error("Error adding todo:", error);
     return res.status(400).json({
       error: true,
       message: "Internal Server Error",
@@ -76,7 +75,7 @@ export const updateTodo = async (req, res) => {
 
     await todo.save();
 
-    return res.status(201).json({
+    return res.status(200).json({
       error: false,
       todo,
       message: "Todo updated Successfully",
@@ -92,11 +91,21 @@ export const updateTodo = async (req, res) => {
 //Get All Todo
 export const getTodos = async (req, res) => {
   const { user } = req.user;
+  const { query } = req.query;
 
   try {
-    const todos = await Todo.find({
+    const searchTodo = {
       userId: user._id,
-    }).sort({
+    };
+
+    if (query) {
+      searchTodo.$or = [
+        { title: { $regex: new RegExp(query, "i") } },
+        { description: { $regex: new RegExp(query, "i") } },
+      ];
+    }
+
+    const todos = await Todo.find(searchTodo).sort({
       isPinned: -1,
     });
 
@@ -125,7 +134,7 @@ export const deleteTodo = async (req, res) => {
     });
 
     if (!todo) {
-      return res.status(404).json({
+      return res.status(401).json({
         error: true,
         message: "Todo not found",
       });
@@ -136,7 +145,7 @@ export const deleteTodo = async (req, res) => {
       userId: user._id,
     });
 
-    return res.json({
+    return res.status(204).json({
       error: false,
       message: "Todo delete successfully",
     });
@@ -149,7 +158,7 @@ export const deleteTodo = async (req, res) => {
 };
 
 //Update isCompleted Value
-export const isCompleted = async (req, res) => {
+export const toggleCompleteStatus = async (req, res) => {
   const todoId = req.params.id;
 
   const { Completed } = req.body;
@@ -169,7 +178,7 @@ export const isCompleted = async (req, res) => {
 
     await todo.save();
 
-    return res.status(201).json({
+    return res.status(200).json({
       error: false,
       todo,
       message: "Todo updated Successfully",
@@ -183,7 +192,7 @@ export const isCompleted = async (req, res) => {
 };
 
 //Update isPinned Value
-export const isPinned = async (req, res) => {
+export const togglePinnedStatus = async (req, res) => {
   const todoId = req.params.id;
 
   const { isPinned } = req.body;
@@ -203,7 +212,7 @@ export const isPinned = async (req, res) => {
 
     await todo.save();
 
-    return res.status(201).json({
+    return res.status(200).json({
       error: false,
       todo,
       message: "Todo updated Successfully",
@@ -212,39 +221,6 @@ export const isPinned = async (req, res) => {
     return res.status(500).json({
       error: true,
       message: "Internal Server Error",
-    });
-  }
-};
-
-export const searchTodo = async (req, res) => {
-  const { user } = req.user;
-  const { query } = req.query;
-
-  if (!query) {
-    return res.status(400).json({
-      error: true,
-      message: "Search query is required",
-    });
-  }
-
-  try {
-    const matchingTodo = await Todo.find({
-      userId: user._id,
-      $or: [
-        { title: { $regex: new RegExp(query, "i") } },
-        { description: { $regex: new RegExp(query, "i") } },
-      ],
-    });
-
-    return res.json({
-      error: false,
-      todos: matchingTodo,
-      message: "Todo matching the search query retrived successfully",
-    });
-  } catch (error) {
-    return res.status(500).json({
-      error: true,
-      message: "Internal Server error",
     });
   }
 };

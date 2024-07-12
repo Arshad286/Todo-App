@@ -1,16 +1,18 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 const todoSchema = mongoose.Schema({
     title: {
         type: String,
         required: true,
         trim : true,
+        index: true,
     },
 
     description: {
         type: String,
         required: true,
         trim : true,
+        index: true,
     },
 
     type: { 
@@ -30,7 +32,8 @@ const todoSchema = mongoose.Schema({
         default:false,
     },
     userId:{
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: "User",
         required:true,
     },
 
@@ -38,14 +41,6 @@ const todoSchema = mongoose.Schema({
         type: Date,
         required: true,
       },
-      createdAt: {
-        type: Date,
-        default: Date.now,
-      },
-      updatedAt: {
-        type: Date,
-        default: Date.now,
-      }
-})
+}, {timestamps : true})
 
 export default mongoose.model("Todo", todoSchema );

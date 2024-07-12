@@ -1,16 +1,15 @@
 import express from 'express';
-import {addTodo, updateTodo, getTodos, deleteTodo, isPinned , isCompleted,searchTodo} from '../controllers/todo-controller.js'
-import {authenticationToken} from '../middlewares/account-auth.js';
+import {addTodo, updateTodo, getTodos, deleteTodo, togglePinnedStatus , toggleCompleteStatus} from '../controllers/todo-controller.js'
+import {ensureAccess} from '../middlewares/account-auth.js';
 
 const router = express.Router();
 
-router.post('/todos',authenticationToken,addTodo);
-router.put('/todos/:id', authenticationToken, updateTodo);
-router.get('/todos', authenticationToken, getTodos);
-router.delete('/todos/:id', authenticationToken, deleteTodo);
+router.post('/todos',ensureAccess,addTodo);
+router.put('/todos/:id', ensureAccess, updateTodo);
+router.get('/todos', ensureAccess, getTodos);
+router.delete('/todos/:id', ensureAccess, deleteTodo);
 
-router.patch('/todos/:id', authenticationToken, isPinned);
-router.patch('/todos/:id/status', authenticationToken, isCompleted);
-router.get('/todos/search', authenticationToken, searchTodo);
+router.patch('/todos/:id', ensureAccess, togglePinnedStatus);
+router.patch('/todos/:id/status', ensureAccess, toggleCompleteStatus);
 
 export default router;
