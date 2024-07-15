@@ -3,7 +3,7 @@ import ProfileInfo from "../Cards/profile-info";
 import SearchBar from "../SearchBar/search-bar";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const Navbar = ({ userInfo, onSearchTodo, handleClearSearch }) => {
+const Navbar = ({  onSearchTodo, handleClearSearch }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -29,26 +29,27 @@ const Navbar = ({ userInfo, onSearchTodo, handleClearSearch }) => {
     handleClearSearch();
   };
 
-  const isLoginOrSignupPage = location.pathname === '/login' || location.pathname === '/signUp';
-  
+  const isLoginOrSignupPage =
+    location.pathname === "/login" || location.pathname === "/signUp";
 
   return (
     <div className="bg-white flex items-center justify-between px-6 py-2 drop-shadow">
       <h2 className="text-black py-2 text-xl font-medium">Todo</h2>
- 
-    {!isLoginOrSignupPage && (
-      <SearchBar
-        value={searchQuery}
-        onChange={({ target }) => {
-          setsearchQuery(target.value);
-        }}
-        handleSearch={handleSearch}
-        onClearSearch={onClearSearch}
-      />
-          )}
 
+      {!isLoginOrSignupPage && (
+        <>
+          <SearchBar
+            value={searchQuery}
+            onChange={({ target }) => {
+              setsearchQuery(target.value);
+            }}
+            handleSearch={handleSearch}
+            onClearSearch={onClearSearch}
+          />
 
-      <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
+          <ProfileInfo onLogout={onLogout} />
+        </>
+      )}
     </div>
   );
 };

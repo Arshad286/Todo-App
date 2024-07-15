@@ -64,26 +64,3 @@ export const createAccount = async (req, res) => {
     });
   }
 };
-
-//Get User
-export const getUserInfo = async (req, res) => {
-  try {
-    const { user } = req.user;
-    const isUser = await User.findOne({
-      _id: user._id,
-    });
-
-    if (!isUser) {
-      return res.status(401).json({ message: "User not found" });
-    }
-
-    return res.status(200).json({
-      user: isUser,
-      message: "User information retrieved successfully",
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: "Internal server error",
-    });
-  }
-};

@@ -6,11 +6,11 @@ import { validateEmail } from "../../utils/helper";
 import axiosInstance from "../../utils/axios-instance";
 
 const SignUp = () => {
-  const [firstname, SetFirstName] = useState("");
-  const [lastname, SetLastName] = useState("");
-  const [email, SetEmail] = useState("");
-  const [password, SetPassword] = useState("");
-  const [error, SetError] = useState(null);
+  const [firstname, setFirstName] = useState("");
+  const [lastname, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
@@ -18,43 +18,43 @@ const SignUp = () => {
     e.preventDefault();
 
     if (!firstname) {
-      SetError("Please enter first name");
+      setError("Please enter first name");
       return;
     }
 
     if (!lastname) {
-      SetError("Please enter last name");
+      setError("Please enter last name");
       return;
     }
 
     if (!validateEmail(email)) {
-      SetError("Please enter a valid email address.");
+      setError("Please enter a valid email address.");
       return;
     }
 
     if (!password) {
-      SetError("Please enter a password");
+      setError("Please enter a password");
       return;
     }
 
     if (password.length < 6) {
-      SetError("Password must be at least 6 characters long");
+      setError("Password must be at least 6 characters long");
       return;
     }
 
-    SetError("");
+    setError("");
 
     //SignUp API
     try{
-      const response = await axiosInstance.post("/users/create-account", {
+      const response = await axiosInstance.post("/users/accounts", {
         firstName: firstname,
         lastName: lastname,
         email: email,
-        password: password,
+        hashedPassword: password,
       });
 
       if(response.data && response.data.accessToken){
-        SetError(response.data.message);
+        setError(response.data.message);
         return;
       }
 
@@ -66,9 +66,9 @@ const SignUp = () => {
   }catch(error){
 
     if(error.response && error.response.data && error.response.data.message){
-      SetError(error.response.data.message);
+      setError(error.response.data.message);
     }else{
-      SetError("An  unexpected error occurred. Please try again");
+      setError("An  unexpected error occurred. Please try again");
     }
   } };
 
@@ -94,7 +94,7 @@ const SignUp = () => {
               placeholder="First Name"
               className="input-box w-full mb-4  px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
               value={firstname}
-              onChange={(e) => SetFirstName(e.target.value)}
+              onChange={(e) => setFirstName(e.target.value)}
             />
 
             <input
@@ -102,7 +102,7 @@ const SignUp = () => {
              placeholder="Last Name"
              className="input-box w-full mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
              value={lastname}
-             onChange={(e) => SetLastName(e.target.value)}
+             onChange={(e) => setLastName(e.target.value)}
            />
 
             <input
@@ -110,12 +110,12 @@ const SignUp = () => {
               placeholder="Email"
               className="input-box w-full mb-4  px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
               value={email}
-              onChange={(e) => SetEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
 
             <PasswordInput
               value={password}
-              onChange={(e) => SetPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full mb-4 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
 

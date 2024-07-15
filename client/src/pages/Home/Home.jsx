@@ -6,7 +6,6 @@ import moment from "moment";
 import AddNotes from "./add-notes";
 import Modal from "react-modal";
 import FilterTodo from "../../components/Filter/filter-todo";
-import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axios-instance";
 import Toast from "../../components/ToastMessage/toast-message";
 import EmptyCard from "../../components/EmptyCard/empty-card";
@@ -27,11 +26,8 @@ const Home = () => {
   });
 
   const [addTodos, setAddTodos] = useState([]);
-  const [userInfo, setUserInfo] = useState(null);
-
   const [isSearch, setisSearch] = useState(false);
 
-  const navigate = useNavigate();
 
   const handleEdit = (todoDetails) => {
     setOpenAddModel({ isShown: true, type: "edit", data: todoDetails });
@@ -49,33 +45,21 @@ const Home = () => {
     setShowToastMsg({ isShown: false, message: "" });
   };
 
-  // Get User Info
-  const getUserInfo = async () => {
-    try {
-      const response = await axiosInstance.get("/users/get-user");
-
-      if (response.data && response.data.user) {
-        setUserInfo(response.data.user);
-      }
-    } catch (error) {
-      if (error.response.status === 401) {
-        localStorage.clear();
-        navigate("/login");
-      }
-    }
-  };
 
   //Get all Todos
-  const getAllTodo = async () => {
+  const getAllTodo = async (query) => {
+    
     try {
-      const response = await axiosInstance.get("/todos/todos");
+      const response = await axiosInstance.get(`/todos/todos`,{
+        params : {query}
+      });
 
       if (response.data && response.data.todos) {
+        setisSearch(true);
         setAddTodos(response.data.todos);
       }
     } catch (error) {
-      console.error("Error fetching todos:", error);
-      console.log("An unexpected error occurred. Please try again.");
+      showToastMessage("An unexpected error occurred. Please try again.");
     }
   };
 
@@ -84,9 +68,9 @@ const Home = () => {
     const todoId = data._id;
 
     try {
-      const response = await axiosInstance.delete("/todos/todos/" + todoId);
+      const response = await axiosInstance.delete(`/todos/todos/${todoId}`);
 
-      if (response.data && !response.data.error) {
+      if (response.data || !response.data.error) {
         showToastMessage("Todo Delete Successfully", "delete");
         getAllTodo();
       }
@@ -96,24 +80,8 @@ const Home = () => {
         error.response.data &&
         error.response.data.message
       ) {
-        console.log("An unexpected error occured, Please try again");
+       showToastMessage("An unexpected error occured, Please try again");
       }
-    }
-  };
-
-  //Search Todos
-  const onSearchTodo = async (query) => {
-    try {
-      const response = await axiosInstance.get("/todos/todos/search", {
-        params: { query },
-      });
-
-      if (response.data && response.data.todos) {
-        setisSearch(true);
-        setAddTodos(response.data.todos);
-      }
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -134,7 +102,8 @@ const Home = () => {
         getAllTodo();
       }
     } catch (error) {
-      console.log(error);
+      showToastMessage("An unexpected error occured, Please try again");
+
     }
   };
 
@@ -151,7 +120,7 @@ const Home = () => {
         getAllTodo();
       }
     } catch (error) {
-      console.log(error);
+      showToastMessage("An unexpected error occured, Please try again");
     }
   };
 
@@ -162,7 +131,6 @@ const Home = () => {
 
   useEffect(() => {
     getAllTodo();
-    getUserInfo();
   }, []);
 
   const [filter, setFilter] = useState({ status: "all", overdue: "all" });
@@ -187,8 +155,7 @@ const Home = () => {
   return (
     <>
       <Navbar
-        userInfo={userInfo}
-        onSearchTodo={onSearchTodo}
+        onSearchTodo={getAllTodo}
         handleClearSearch={handleClearSearch}
       />
       <div className="conatiner mx-auto">
@@ -238,7 +205,6 @@ const Home = () => {
 
       <Modal
         isOpen={openAddModal.isShown}
-        onRequestClose={() => {}}
         style={{
           overlay: {
             backgroundColor: "rgba(0,0,0,0.2)",
