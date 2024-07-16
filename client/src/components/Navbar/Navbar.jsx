@@ -3,7 +3,7 @@ import ProfileInfo from "../Cards/profile-info";
 import SearchBar from "../SearchBar/search-bar";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const Navbar = ({  onSearchTodo, handleClearSearch }) => {
+const Navbar = ({ onSearchTodo, handleClearSearch }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -38,18 +38,18 @@ const Navbar = ({  onSearchTodo, handleClearSearch }) => {
 
       {!isLoginOrSignupPage && (
         <>
-          <SearchBar
-            value={searchQuery}
-            onChange={({ target }) => {
-              setsearchQuery(target.value);
-            }}
-            handleSearch={handleSearch}
-            onClearSearch={onClearSearch}
-          />
-
-          <ProfileInfo onLogout={onLogout} />
+        <SearchBar
+          value={searchQuery}
+          onChange={({ target }) => {
+            setsearchQuery(target.value);
+          }}
+          handleSearch={handleSearch}
+          onClearSearch={onClearSearch}
+        />
+        <ProfileInfo onLogout={onLogout} />
         </>
       )}
+     
     </div>
   );
 };

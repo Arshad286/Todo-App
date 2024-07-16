@@ -50,12 +50,12 @@ const Home = () => {
   const getAllTodo = async (query) => {
     
     try {
-      const response = await axiosInstance.get(`/todos/todos`,{
+      const response = await axiosInstance.get(`/todos`,{
         params : {query}
       });
 
       if (response.data && response.data.todos) {
-        setisSearch(true);
+        setisSearch(!!query);
         setAddTodos(response.data.todos);
       }
     } catch (error) {
@@ -68,7 +68,7 @@ const Home = () => {
     const todoId = data._id;
 
     try {
-      const response = await axiosInstance.delete(`/todos/todos/${todoId}`);
+      const response = await axiosInstance.delete(`/todos/${todoId}`);
 
       if (response.data || !response.data.error) {
         showToastMessage("Todo Delete Successfully", "delete");
@@ -91,7 +91,7 @@ const Home = () => {
 
     try {
       const response = await axiosInstance.patch(
-        `/todos/todos/${todoId}/status`,
+        `/todos/${todoId}/status`,
         {
           Completed: !todoData.Completed,
         }
@@ -112,7 +112,7 @@ const Home = () => {
     const todoId = todoData._id;
 
     try {
-      const response = await axiosInstance.patch(`/todos/todos/${todoId}`, {
+      const response = await axiosInstance.patch(`/todos/${todoId}`, {
         isPinned: !todoData.isPinned,
       });
       if (response.data && !response.data.error) {

@@ -1,5 +1,5 @@
 import express from "express";
-import { createAccessToken } from "../controllers/auth-controller.js"; 
+import { createAccessToken } from "../controllers/access-token-controller.js";
 
 const router = express.Router();
 

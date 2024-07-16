@@ -46,7 +46,7 @@ const SignUp = () => {
 
     //SignUp API
     try{
-      const response = await axiosInstance.post("/users/accounts", {
+      const response = await axiosInstance.post("/users", {
         firstName: firstname,
         lastName: lastname,
         email: email,

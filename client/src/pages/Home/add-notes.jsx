@@ -21,7 +21,7 @@ const AddNotes = ({ todoData, tag, getAllTodo, onClose, showToastMessage }) => {
   // Add new Todo
   const addNewTodo = async () => {
     try {
-      const response = await axiosInstance.post("/todos/todos", {
+      const response = await axiosInstance.post("/todos", {
         title,
         description,
         type,
@@ -48,7 +48,7 @@ const AddNotes = ({ todoData, tag, getAllTodo, onClose, showToastMessage }) => {
   const editTodo = async () => {
     const todoId = todoData._id;
     try {
-      const response = await axiosInstance.put("/todos/todos/" + todoId, {
+      const response = await axiosInstance.put("/todos/" + todoId, {
         title,
         description,
         type,

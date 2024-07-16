@@ -4,12 +4,12 @@ import {ensureAccess} from '../middlewares/account-auth.js';
 
 const router = express.Router();
 
-router.post('/todos',ensureAccess,addTodo);
-router.put('/todos/:id', ensureAccess, updateTodo);
-router.get('/todos', ensureAccess, getTodos);
-router.delete('/todos/:id', ensureAccess, deleteTodo);
+router.post('/',ensureAccess,addTodo);
+router.put('/:id', ensureAccess, updateTodo);
+router.get('/', ensureAccess, getTodos);
+router.delete('/:id', ensureAccess, deleteTodo);
 
-router.patch('/todos/:id', ensureAccess, togglePinnedStatus);
-router.patch('/todos/:id/status', ensureAccess, toggleCompleteStatus);
+router.patch('/:id', ensureAccess, togglePinnedStatus);
+router.patch('/:id/status', ensureAccess, toggleCompleteStatus);
 
 export default router;

@@ -13,8 +13,7 @@ export const addTodo = async (req, res) => {
 
   if (!["Official", "Personal", "Hobby"].includes(type)) {
     return res.status(400).json({
-      error: true,
-      message: "Invalid type. Must be one of: Official, Personal, Hobby",
+      error: "Invalid type. Must be one of: Official, Personal, Hobby",
     });
   }
 
@@ -32,14 +31,12 @@ export const addTodo = async (req, res) => {
     await newTodo.save();
 
     return res.status(201).json({
-      error: false,
       newTodo,
       message: "Todo added Successfully",
     });
   } catch (error) {
     return res.status(400).json({
-      error: true,
-      message: "Internal Server Error",
+      error: "Internal Server Error",
     });
   }
 };
@@ -53,7 +50,6 @@ export const updateTodo = async (req, res) => {
 
   if (!title && !description && !type && !dueDate) {
     return res.status(400).json({
-      error: true,
       message: "No Changes Provided",
     });
   }
@@ -63,7 +59,6 @@ export const updateTodo = async (req, res) => {
 
     if (!todo) {
       return res.status(404).json({
-        error: true,
         message: "Todo Not Found",
       });
     }
@@ -76,14 +71,12 @@ export const updateTodo = async (req, res) => {
     await todo.save();
 
     return res.status(200).json({
-      error: false,
       todo,
       message: "Todo updated Successfully",
     });
   } catch (error) {
     return res.status(500).json({
-      error: true,
-      message: "Internal Server Error",
+      error: "Internal Server Error",
     });
   }
 };
@@ -110,14 +103,12 @@ export const getTodos = async (req, res) => {
     });
 
     return res.status(200).json({
-      error: false,
       todos,
       message: "All Todos received successfully",
     });
   } catch (error) {
     return res.status(500).json({
-      error: true,
-      message: "Internal Server Error",
+      error: "Internal Server Error",
     });
   }
 };
@@ -135,8 +126,7 @@ export const deleteTodo = async (req, res) => {
 
     if (!todo) {
       return res.status(401).json({
-        error: true,
-        message: "Todo not found",
+        error: "Todo not found",
       });
     }
 
@@ -145,14 +135,10 @@ export const deleteTodo = async (req, res) => {
       userId: user._id,
     });
 
-    return res.status(204).json({
-      error: false,
-      message: "Todo delete successfully",
-    });
+    return res.status(204).send();
   } catch (error) {
     return res.status(500).json({
-      error: true,
-      message: "Internal Server Error",
+      error: "Internal Server Error",
     });
   }
 };
@@ -169,8 +155,7 @@ export const toggleCompleteStatus = async (req, res) => {
 
     if (!todo) {
       return res.status(404).json({
-        error: true,
-        message: "Todo Not Found",
+        error: "Todo Not Found",
       });
     }
 
@@ -179,14 +164,12 @@ export const toggleCompleteStatus = async (req, res) => {
     await todo.save();
 
     return res.status(200).json({
-      error: false,
       todo,
       message: "Todo updated Successfully",
     });
   } catch (error) {
     return res.status(500).json({
-      error: true,
-      message: "Internal Server Error",
+      error: "Internal Server Error",
     });
   }
 };
@@ -203,8 +186,7 @@ export const togglePinnedStatus = async (req, res) => {
 
     if (!todo) {
       return res.status(404).json({
-        error: true,
-        message: "Todo Not Found",
+        error: "Todo Not Found",
       });
     }
 
@@ -213,14 +195,12 @@ export const togglePinnedStatus = async (req, res) => {
     await todo.save();
 
     return res.status(200).json({
-      error: false,
       todo,
       message: "Todo updated Successfully",
     });
   } catch (error) {
     return res.status(500).json({
-      error: true,
-      message: "Internal Server Error",
+      error: "Internal Server Error",
     });
   }
 };

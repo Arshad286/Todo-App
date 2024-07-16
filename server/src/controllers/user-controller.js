@@ -19,19 +19,18 @@ export const createAccount = async (req, res) => {
 
     if (existingUser) {
       return res.status(409).json({
-        error: true,
-        message: "User already exist",
+        error: "User already exist",
       });
     }
 
-    const GethashedPassword = await bcrypt.hash(hashedPassword, 10);
+    const gethashedPassword = await bcrypt.hash(hashedPassword, 10);
 
     //Create a new user
     const newuser = new User({
       firstName,
       lastName,
       email,
-      hashedPassword: GethashedPassword,
+      hashedPassword: gethashedPassword,
     });
 
     await newuser.save();
@@ -55,12 +54,10 @@ export const createAccount = async (req, res) => {
         email: newuser.email,
       },
       accessToken,
-      message: "Registration Successfull",
     });
   } catch (error) {
     return res.status(500).json({
-      error: true,
-      message: "Intenal server error",
+      error: "Intenal server error",
     });
   }
 };
